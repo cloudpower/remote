@@ -28,5 +28,5 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-server.listen(3001);
-console.log('Listening on 3001');
+server.listen(8004);
+console.log('Listening on 8004');
