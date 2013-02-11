@@ -3,7 +3,8 @@ var express = require('express'),
 
 var app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server),
+    connectedClients = {};
 
 // set up the Express static file serving
 // @todo replace with nginx for this stuff
@@ -19,12 +20,22 @@ app.get('/', function(req, res){
 
 // API routes
 
+app.post('/api/v1/:client/:port', function(req, res){
+    console.log('got a ' + req.body.state + ' state request for port ' + req.params.port + 
+        ' for client ' + req.params.client);
+});
+
+app.get('/api/v1/:client/:port', function(req, res){
+    console.log('got a get state request for port ' + req.params.port + 
+        ' for client ' + req.params.client);
+});
 
 // WebSocket routes
 io.sockets.on('connection', function (socket) {
     console.log('connection');
-    socket.on('event', function(data){
-        console.log(data);
+    socket.on('client-id', function(clientId){
+        console.log('got connection from ' + clientId);
+        connectedClients[clientId] = socket;
     });
 });
 
