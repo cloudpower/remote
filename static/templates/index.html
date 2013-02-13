@@ -17,11 +17,15 @@
 			console.log('SSID: ' + ssid);
 			console.log('PSK: ' + psk);
 			$("#qrcode").empty();
-			var qrObject = {
-				'SSID': ssid,
-				'PSK': psk
-			}
-			$("#qrcode").qrcode(JSON.stringify(qrObject));
+			$.get('/api/v1/id', function(data){
+				var qrObject = {
+					'id': data.id,
+					'SSID': ssid,
+					'PSK': psk
+				}
+				console.log(qrObject);
+				$("#qrcode").qrcode(JSON.stringify(qrObject));
+			});
 		});
 	</script>
 

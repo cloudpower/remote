@@ -69,7 +69,9 @@ app.get('/api/v1/:device/:outlet', function(req, res){
 // id generator
 app.get('/api/v1/id', function(req, res){
     var id = guid.create().value;
-    res.send(id);
+    res.send({
+        'id': id
+    });
 });
 
 // WebSocket routes
