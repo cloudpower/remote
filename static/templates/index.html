@@ -1,0 +1,30 @@
+<html>
+<head>
+	<title>cloudpower</title>
+</head>
+
+<body>
+	SSID: <input id="ssid" type="text"/><br/>
+	PSK: <input id="psk" type="text"/><br/>
+	<button id="submit">submit</button>
+	<div id="qrcode"></div>
+	<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+	<script type="text/javascript">
+		$("#submit").click(function(){
+			var ssid = $("#ssid").val();
+			var psk = $("#psk").val();
+			console.log('SSID: ' + ssid);
+			console.log('PSK: ' + psk);
+			$("#qrcode").empty();
+			var qrObject = {
+				'SSID': ssid,
+				'PSK': psk
+			}
+			$("#qrcode").qrcode(JSON.stringify(qrObject));
+		});
+	</script>
+
+</body>
+
+</html>
