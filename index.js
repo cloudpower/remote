@@ -20,13 +20,30 @@ app.get('/', function(req, res){
 
 // API routes
 
-app.post('/api/v1/:device/:port', function(req, res){
-    console.log('got a ' + req.body.state + ' state request for port ' + req.params.port + 
-        ' for device ' + req.params.device);
+app.post('/api/v1/:device/:outlet', function(req, res){
+    console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet + 
+        ' for device id ' + req.params.device);
+    // check to see if the requested device is connected
+    if (!connectedDevices.hasOwnProperty(req.params.device)){
+        return res.send('this device is offline');
+    }
+    
+    var ws = connectedDevices[req.params.device];
+
+    // send a request through the websocket to query the state of the requested outlet
+    ws.emit('set', {
+        'outlet': req.params.outlet,
+        'state': req.body.state
+    });
+
+    // wait for a response
+    ws.on('response', function(data){
+        res.send('the state of outlet ' + data.outlet + ' is ' + data.state);
+    });
 });
 
-app.get('/api/v1/:device/:port', function(req, res){
-    console.log('got a get state request for port ' + req.params.port + 
+app.get('/api/v1/:device/:outlet', function(req, res){
+    console.log('got a get state request for outlet ' + req.params.outlet + 
         ' for device ' + req.params.device);
 
     // check to see if the requested device is connected
@@ -36,14 +53,14 @@ app.get('/api/v1/:device/:port', function(req, res){
     
     var ws = connectedDevices[req.params.device];
 
-    // send a request through the websocket to query the state of the requested port
+    // send a request through the websocket to query the state of the requested outlet
     ws.emit('get', {
-        'port': req.params.port
+        'outlet': req.params.outlet
     });
 
     // wait for a response
     ws.on('response', function(data){
-        res.send('the state of port ' + data.port + ' is ' + data.state);
+        res.send('the state of outlet ' + data.outlet + ' is ' + data.state);
     });
 
 });
