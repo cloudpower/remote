@@ -1,5 +1,6 @@
 var express = require('express'),
-    fs = require('fs');
+    fs = require('fs'),
+    guid = require('guid');
 
 var app = express(),
     server = require('http').createServer(app),
@@ -63,6 +64,12 @@ app.get('/api/v1/:device/:outlet', function(req, res){
         res.send('the state of outlet ' + data.outlet + ' is ' + data.state);
     });
 
+});
+
+// id generator
+app.get('/api/v1/id', function(req, res){
+    var id = guid.create().value;
+    res.send(id);
 });
 
 // WebSocket routes
