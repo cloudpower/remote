@@ -14,9 +14,8 @@
 		$("#submit").click(function(){
 			var ssid = $("#ssid").val();
 			var psk = $("#psk").val();
-			console.log('SSID: ' + ssid);
-			console.log('PSK: ' + psk);
 			$("#qrcode").empty();
+			// get a unique identifier for this device from the server
 			$.get('/api/v1/id', function(data){
 				var qrObject = {
 					'id': data.id,
@@ -24,6 +23,7 @@
 					'PSK': psk
 				}
 				console.log(qrObject);
+				// turn it into a qr code to be scanned by the device
 				$("#qrcode").qrcode(JSON.stringify(qrObject));
 			});
 		});

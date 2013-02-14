@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require('express'),
     fs = require('fs'),
     guid = require('guid');
@@ -22,7 +24,7 @@ app.get('/', function(req, res){
 // API routes
 
 app.post('/api/v1/:device/:outlet', function(req, res){
-    console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet + 
+    console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet +
         ' for device id ' + req.params.device);
     // check to see if the requested device is connected
     if (!connectedDevices.hasOwnProperty(req.params.device)){
@@ -44,7 +46,7 @@ app.post('/api/v1/:device/:outlet', function(req, res){
 });
 
 app.get('/api/v1/:device/:outlet', function(req, res){
-    console.log('got a get state request for outlet ' + req.params.outlet + 
+    console.log('got a get state request for outlet ' + req.params.outlet +
         ' for device ' + req.params.device);
 
     // check to see if the requested device is connected
