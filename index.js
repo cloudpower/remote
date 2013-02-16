@@ -7,12 +7,16 @@ var express = require('express'),
 var app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
-    connectedDevices = {};
+    connectedDevices = {},
+    db = require('./lib/db').create('remote.db');
 
 // set up the Express static file serving
 // @todo replace with nginx for this stuff
 app.use("/static", express.static(__dirname + '/static'));
 app.use(express.bodyParser());
+var auth = express.basicAuth(function(user, pass){
+    return true;
+});
 
 // the main web application route
 app.get('/', function(req, res){
@@ -23,6 +27,7 @@ app.get('/', function(req, res){
 
 // API routes
 
+// POST - this is the 'set state'
 app.post('/api/v1/:device/:outlet', function(req, res){
     console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet +
         ' for device id ' + req.params.device);
@@ -45,6 +50,7 @@ app.post('/api/v1/:device/:outlet', function(req, res){
     });
 });
 
+// GET - this is the 'get state'
 app.get('/api/v1/:device/:outlet', function(req, res){
     console.log('got a get state request for outlet ' + req.params.outlet +
         ' for device ' + req.params.device);
@@ -89,5 +95,8 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-server.listen(8004);
-console.log('Listening on 8004');
+db.connect().then(function(){
+    server.listen(8004);
+    console.log('Listening on 8004');
+});
+
