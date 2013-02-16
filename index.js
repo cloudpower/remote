@@ -12,22 +12,25 @@ var app = express(),
     connectedDevices = {},
     db = require('./lib/db').create('remote.db');
 
-// set up the user authentication
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        db.getUser(username, password).then(function(user) {
-            return done(null, user);
-        }, function(err){
-            return done(err);
-        });
-    }
-));
-
 // set up the Express static file serving
 // @todo replace with nginx for this stuff
 app.use("/static", express.static(__dirname + '/static'));
 app.use(express.bodyParser());
 app.use(passport.initialize());
+app.use(app.router);
+
+// set up the user authentication
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        db.authenticate(username, password).then(function() {
+            return done(null, {
+                'username': username
+            });
+        }, function(err){
+            return done(err);
+        });
+    }
+));
 
 // the main web application route
 app.get('/', function(req, res){
@@ -91,6 +94,11 @@ app.get('/api/v1/id', function(req, res){
     res.send({
         'id': id
     });
+});
+
+// users
+app.get('/api/v1/authenticate', passport.authenticate('local', { session: false }), function(req, res){
+    res.send('hello');
 });
 
 // WebSocket routes
