@@ -10,7 +10,10 @@
     "superagent": "0.10.0",
     "leveldb": "0.7.1",
     "socket.io": "0.9.13",
-    "guid": "0.0.10"
+    "guid": "0.0.10",
+    "passport": "0.1.15",
+    "passport-local": "0.1.6",
+    "bcrypt": "0.7.3"
   },
   "scripts": {
     "start": "node index.js"

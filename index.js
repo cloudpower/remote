@@ -2,7 +2,9 @@
 
 var express = require('express'),
     fs = require('fs'),
-    guid = require('guid');
+    guid = require('guid'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 
 var app = express(),
     server = require('http').createServer(app),
@@ -10,13 +12,22 @@ var app = express(),
     connectedDevices = {},
     db = require('./lib/db').create('remote.db');
 
+// set up the user authentication
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        db.getUser(username, password).then(function(user) {
+            return done(null, user);
+        }, function(err){
+            return done(err);
+        });
+    }
+));
+
 // set up the Express static file serving
 // @todo replace with nginx for this stuff
 app.use("/static", express.static(__dirname + '/static'));
 app.use(express.bodyParser());
-var auth = express.basicAuth(function(user, pass){
-    return true;
-});
+app.use(passport.initialize());
 
 // the main web application route
 app.get('/', function(req, res){
