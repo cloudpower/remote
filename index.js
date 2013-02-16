@@ -65,7 +65,7 @@ app.post('/api/v1/:device/:outlet', function(req, res){
 });
 
 // GET - this is the 'get state'
-app.get('/api/v1/:device/:outlet', function(req, res){
+app.get('/api/v1/device/:device/:outlet', function(req, res){
     console.log('got a get state request for outlet ' + req.params.outlet +
         ' for device ' + req.params.device);
 
@@ -96,9 +96,31 @@ app.get('/api/v1/id', function(req, res){
     });
 });
 
-// users
+// USER ROUTES
 app.get('/api/v1/authenticate', passport.authenticate('local', { session: false }), function(req, res){
     res.send('hello');
+});
+
+app.get('/api/v1/user/:username', function(req, res){
+    db.getUser(req.params.username).then(function(user){
+        // success
+        res.send(user);
+    }, function(){
+        // failure
+        res.send(404);
+    });
+});
+
+app.post('/api/v1/user', function(req, res){
+    db.insertUser(req.body.username, req.body.password).then(function(){
+        //success
+        res.send({
+            'username': req.body.username
+        });
+    }, function(){
+        // failure
+        res.send(500);
+    });
 });
 
 // WebSocket routes
