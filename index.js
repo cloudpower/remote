@@ -42,7 +42,7 @@ app.get('/', function(req, res){
 // API routes
 
 // POST - this is the 'set state'
-app.post('/api/v1/:device/:outlet', function(req, res){
+app.post('/api/v1/device/:device/:outlet', function(req, res){
     console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet +
         ' for device id ' + req.params.device);
     // check to see if the requested device is connected
