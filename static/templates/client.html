@@ -4,21 +4,22 @@
 </head>
 
 <body>
-	<button id="on">on</button> <button id="off">off</button>
+	<button id="on">on</button> <button id="off">off</button><br/>
+	<div id="status">
 	<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript">
 		$("#on").click(function(){
 			$.post('/api/v1/device/device-0/3', {
 				'state': 1
 			}, function(data){
-				console.log(data);
+				$("#status").text(data);
 			});
 		});
 		$("#off").click(function(){
 			$.post('/api/v1/device/device-0/3', {
 				'state': 0
 			}, function(data){
-				console.log(data);
+				$("#status").text(data);
 			});
 		});
 	</script>
