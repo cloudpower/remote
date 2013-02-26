@@ -31,6 +31,13 @@ app.use(passport.initialize());
 
 // the main web application route
 app.get('/', function(req, res){
+    fs.readFile(__dirname + '/static/templates/client.html', 'UTF-8', function(err, data){
+        res.send(data);
+    });
+});
+
+// the main web application route
+app.get('/new', function(req, res){
     fs.readFile(__dirname + '/static/templates/index.html', 'UTF-8', function(err, data){
         res.send(data);
     });
@@ -39,7 +46,7 @@ app.get('/', function(req, res){
 // API routes
 
 // POST - this is the 'set state'
-app.post('/api/v1/:device/:outlet', function(req, res){
+app.post('/api/v1/device/:device/:outlet', function(req, res){
     console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet +
         ' for device id ' + req.params.device);
     // check to see if the requested device is connected
@@ -62,7 +69,7 @@ app.post('/api/v1/:device/:outlet', function(req, res){
 });
 
 // GET - this is the 'get state'
-app.get('/api/v1/:device/:outlet', function(req, res){
+app.get('/api/v1/device/:device/:outlet', function(req, res){
     console.log('got a get state request for outlet ' + req.params.outlet +
         ' for device ' + req.params.device);
 
