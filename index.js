@@ -4,7 +4,8 @@ var express = require('express'),
     fs = require('fs'),
     guid = require('guid'),
     passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
+    LocalStrategy = require('passport-local').Strategy,
+    p = require('ua-parser');
 
 var app = express(),
     server = require('http').createServer(app),
@@ -32,11 +33,20 @@ passport.use(new LocalStrategy(
     }
 ));
 
-// the main web application route
+
+// these should be templated/bootstrapped to prevent excessive AJAXing
 app.get('/', function(req, res){
-    fs.readFile(__dirname + '/static/templates/client.html', 'UTF-8', function(err, data){
-        res.send(data);
-    });
+    var os = p.parseOS(req.headers['user-agent']).toString();
+    if (os.indexOf('iOS') !== -1 || os.indexOf('Android') !== -1){
+        fs.readFile(__dirname + '/static/templates/client_mobile.html', 'UTF-8', function(err, data){
+            res.send(data);
+        });
+    }
+    else {
+        fs.readFile(__dirname + '/static/templates/client.html', 'UTF-8', function(err, data){
+            res.send(data);
+        });
+    }
 });
 
 // the main web application route
