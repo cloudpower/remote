@@ -20,6 +20,7 @@ body{
 	color: white;
 }
 .content{
+	font-size: 18px;
 	width: 100%;
 	-webkit-background-clip: border-box;
 	-webkit-background-origin: padding-box;
