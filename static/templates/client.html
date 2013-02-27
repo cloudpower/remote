@@ -20,6 +20,7 @@
 	<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript">
 		$("#on").click(function(){
+			$("#status").text('pending...');
 			$.post('/api/v1/device/device-0/3', {
 				'state': 1
 			}, function(data){
@@ -27,6 +28,7 @@
 			});
 		});
 		$("#off").click(function(){
+			$("#status").text('pending...');
 			$.post('/api/v1/device/device-0/3', {
 				'state': 0
 			}, function(data){
