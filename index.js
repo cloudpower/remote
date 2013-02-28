@@ -64,7 +64,9 @@ app.post('/api/v1/device/:device/:outlet', function(req, res){
         ' for device id ' + req.params.device);
     // check to see if the requested device is connected
     if (!connectedDevices.hasOwnProperty(req.params.device)){
-        return res.send('this device is offline');
+        return res.send({
+            'error': 'this device is offline.'
+        });
     }
 
     var ws = connectedDevices[req.params.device];
@@ -91,7 +93,9 @@ app.get('/api/v1/device/:device/:outlet', function(req, res){
 
     // check to see if the requested device is connected
     if (!connectedDevices.hasOwnProperty(req.params.device)){
-        return res.send('this device is offline');
+        return res.send({
+            'error': 'this device is offline.'
+        });
     }
 
     var ws = connectedDevices[req.params.device];
