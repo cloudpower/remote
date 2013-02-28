@@ -66,7 +66,7 @@ app.post('/api/v1/device/:device/:outlet', function(req, res){
     if (!connectedDevices.hasOwnProperty(req.params.device)){
         return res.send('this device is offline');
     }
-    
+
     var ws = connectedDevices[req.params.device];
 
     // send a request through the websocket to query the state of the requested outlet
@@ -77,7 +77,10 @@ app.post('/api/v1/device/:device/:outlet', function(req, res){
 
     // wait for a response
     ws.on('response', function(data){
-        res.send('the state of outlet ' + data.outlet + ' is ' + data.state);
+        res.send({
+            'outlet': data.outlet,
+            'state': data.state
+        });
     });
 });
 
@@ -90,7 +93,7 @@ app.get('/api/v1/device/:device/:outlet', function(req, res){
     if (!connectedDevices.hasOwnProperty(req.params.device)){
         return res.send('this device is offline');
     }
-    
+
     var ws = connectedDevices[req.params.device];
 
     // send a request through the websocket to query the state of the requested outlet
@@ -100,7 +103,10 @@ app.get('/api/v1/device/:device/:outlet', function(req, res){
 
     // wait for a response
     ws.on('response', function(data){
-        res.send('the state of outlet ' + data.outlet + ' is ' + data.state);
+        res.send({
+            'outlet': data.outlet,
+            'state': data.state
+        });
     });
 
 });
