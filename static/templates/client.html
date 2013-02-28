@@ -24,7 +24,13 @@
 			$.post('/api/v1/device/device-0/3', {
 				'state': 1
 			}, function(data){
-				$("#status").text(data);
+				if (data.hasOwnProperty('error')){
+					$("#status").text(data.error);
+				}
+				else {
+					$("#status").text('the state of outlet ' + data.outlet + ' is ' + data.state);
+				}
+				
 			});
 		});
 		$("#off").click(function(){
@@ -32,7 +38,12 @@
 			$.post('/api/v1/device/device-0/3', {
 				'state': 0
 			}, function(data){
-				$("#status").text(data);
+				if (data.hasOwnProperty('error')){
+					$("#status").text(data.error);
+				}
+				else {
+					$("#status").text('the state of outlet ' + data.outlet + ' is ' + data.state);
+				}
 			});
 		});
 	</script>
