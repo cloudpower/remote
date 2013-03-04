@@ -38,6 +38,58 @@ describe('Database', function(){
 		});
 	});
 
+	// INSERT VALUES into USERS
+	it('insert some values into users table',function(done){
+		myDatabase.insertUser('Drew','drew@drew.com', new Date()).then(function(){
+			console.log("Successfully inserted user.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+
+	});
+
+	// INSERT VALUES into USERS
+	it('insert some values into users table',function(done){
+		myDatabase.insertUser('Nathan','nathan@drew.com', new Date()).then(function(){
+			console.log("Successfully inserted user.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+
+	});
+
+	// SELECT DREW from USERS
+	it('select some values in users table',function(done){
+		myDatabase.selectUser('Drew').then(function(result){
+			assert.equal('Drew', result.username);
+			assert.notEqual(null, result.creation_date);
+			// console.log(result);
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+
+	});
+
+	// SELECT NATHAN from USERS
+	it('select some values in users table',function(done){
+		myDatabase.selectUser('Nathan').then(function(result){
+			assert.equal('Nathan', result.username);
+			assert.notEqual(null, result.creation_date);
+			// console.log(result);
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+
+	});
+
 	// Delete the tables.
 	it('should delete tables', function(done){
 		myDatabase.deleteTables().then(function(){
@@ -51,6 +103,7 @@ describe('Database', function(){
 	});
 
 });
+
 
 // sequence().then(function(next){ // CONNECT TO SEVER
 // 	myDatabase.connect().then(function(){
