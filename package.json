@@ -8,7 +8,7 @@
     "when": "1.5.1",
     "sequence": "2.2.1",
     "superagent": "0.10.0",
-    "leveldb": "0.7.1",
+    "pg": "0.13.1",
     "socket.io": "0.9.13",
     "guid": "0.0.10",
     "ua-parser": "0.3.1",
