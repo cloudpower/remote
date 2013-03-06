@@ -137,6 +137,31 @@ describe('Database', function(){
 		});
 	});
 
+		// INSERT VALUES into USAGEDATA
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2013,4,5),1.1,1.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+
+
+		// INSERT VALUES into USAGEDATA
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2013,3,27),0.6,0.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+
 	// SELECT DREW from USERS
 	it('select some values in users table',function(done){
 		myDatabase.selectUser('Drew').then(function(result){
@@ -183,17 +208,17 @@ describe('Database', function(){
 		});
 	});
 
-	// DELETE the tables.
-	it('should delete tables', function(done){
-		myDatabase.deleteTables().then(function(){
-			console.log("Tables deleted successfully.");
-			myDatabase.disconnect();
-			return done();
-		}, function(err){
-			console.log('error: ' + err);
-			myDatabase.disconnect();
-		});
-	});
+	// // DELETE the tables.
+	// it('should delete tables', function(done){
+	// 	myDatabase.deleteTables().then(function(){
+	// 		console.log("Tables deleted successfully.");
+	// 		myDatabase.disconnect();
+	// 		return done();
+	// 	}, function(err){
+	// 		console.log('error: ' + err);
+	// 		myDatabase.disconnect();
+	// 	});
+	// });
 
 });
 
