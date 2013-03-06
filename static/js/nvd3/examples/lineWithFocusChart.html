@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link href="../src/nv.d3.css" rel="stylesheet" type="text/css">
+
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+#chart1 svg {
+  height: 500px;
+  min-width: 100px;
+  min-height: 100px;
+/*
+  margin: 50px;
+  Minimum height and width is a good idea to prevent negative SVG dimensions...
+  For example width should be =< margin.left + margin.right + 1,
+  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
+*/
+}
+
+</style>
+<body>
+
+  <div id="chart">
+    <svg style="height: 500px;"></svg>
+  </div>
+
+<script src="../lib/d3.v2.js"></script>
+<script src="../nv.d3.js"></script>
+<script src="../src/tooltip.js"></script>
+<script src="../src/utils.js"></script>
+<script src="../src/models/legend.js"></script>
+<script src="../src/models/axis.js"></script>
+<script src="../src/models/scatter.js"></script>
+<script src="../src/models/line.js"></script>
+<script src="../src/models/lineWithFocusChart.js"></script>
+<script src="stream_layers.js"></script>
+<script>
+
+
+nv.addGraph(function() {
+  var chart = nv.models.lineWithFocusChart();
+
+  chart.xAxis
+      .tickFormat(d3.format(',f'));
+  chart.x2Axis
+      .tickFormat(d3.format(',f'));
+
+  chart.yAxis
+      .tickFormat(d3.format(',.2f'));
+  chart.y2Axis
+      .tickFormat(d3.format(',.2f'));
+
+  d3.select('#chart svg')
+      .datum(theData())
+    .transition().duration(500)
+      .call(chart);
+
+  nv.utils.windowResize(chart.update);
+
+  return chart;
+});
+
+function theData() {
+
+  var usagedata = {};
+  usagedata['4444'] = {
+    socket1: [ 0.1, 0.5, 0.8 ],
+    socket2: [ 0.2, 0.55, 0.8 ],
+    timestamp:
+      [ 'Mon Apr 15 2013 07:00:00 GMT-0700 (PDT)',
+        'Sun May 05 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 11 2013 07:00:00 GMT-0700 (PDT)' ]
+  }
+
+  // look up map vs foreach
+  usagedata['4444'].timestamp.forEach(function(t,index){
+      usagedata['4444'].timestamp[index] = new Date(t).getTime();
+  });
+
+
+  console.log(usagedata);
+
+  data = usagedata;
+
+
+    var socket1 = [],  
+        socket2 = [];
+
+ 
+
+  for (var i = 0; i < 3; i++) {
+    socket1.push({x: data['4444'].timestamp[i], y: data['4444'].socket1[i]});
+    socket2.push({x: data['4444'].timestamp[i], y: data['4444'].socket2[i]});
+  }
+
+  console.log(socket1);
+  console.log(socket2);
+
+  return [
+    {
+      values: socket1,
+      key: "Socket #1",
+      color: "#ff7f0e"
+    },
+    {
+      values: socket2,
+      key: "Socket #2",
+      color: "#2ca02c"
+    }
+  ];
+}
+
+
+function testData() {
+  return stream_layers(3,128,.1).map(function(data, i) {
+    return { 
+      key: 'Stream' + i,
+      values: data
+    };
+  });
+}
+
+
+</script>

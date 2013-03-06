@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link href="../src/nv.d3.css" rel="stylesheet" type="text/css">
+
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+#chart1 svg {
+  height: 500px;
+  min-width: 100px;
+  min-height: 100px;
+/*
+  margin: 50px;
+  Minimum height and width is a good idea to prevent negative SVG dimensions...
+  For example width should be =< margin.left + margin.right + 1,
+  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
+*/
+}
+
+</style>
+<body>
+
+  <div id="chart1">
+    <svg style="height: 500px;"></svg>
+  </div>
+
+<script src="../lib/d3.v2.js"></script>
+<script src="../nv.d3.js"></script>
+<script src="../src/tooltip.js"></script>
+<script src="../src/utils.js"></script>
+<script src="../src/models/legend.js"></script>
+<script src="../src/models/axis.js"></script>
+<script src="../src/models/scatter.js"></script>
+<script src="../src/models/line.js"></script>
+<script src="../src/models/lineChart.js"></script>
+<script>
+
+
+ var usagedata = {};
+  usagedata['4444'] = {
+    socket1: [ 1.1,  0.85, 0.8, 0.1, 0.75, 0.35, 0.35 ],
+    socket2: [ 1.72, 0.15, 0.2, 0.85, 0.22, 0.5,0.75],
+    timestamp:
+      [ 'Mon Apr 25 2013 07:00:00 GMT-0700 (PDT)',
+        'Sun May 05 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 11 2013 07:00:00 GMT-0700 (PDT)',
+        'Fri May 17 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 18 2013 07:00:00 GMT-0700 (PDT)',
+        'Mon May 20 2013 07:00:00 GMT-0700 (PDT)',
+        'Tue May 21 2013 07:00:00 GMT-0700 (PDT)' ]
+  }
+    usagedata['9999'] = {
+    socket1: [ 2.1,  0.85, 0.4, null, 0.95, 0.45 ],
+    socket2: [ 1.52, 1.15, 3.2, 0.5, 0.42, 1.5],
+    timestamp:
+      [ 'Mon Apr 25 2013 07:00:00 GMT-0700 (PDT)',
+        'Sun May 05 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 11 2013 07:00:00 GMT-0700 (PDT)',
+        'Fri May 17 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 18 2013 07:00:00 GMT-0700 (PDT)',
+        'Mon May 20 2013 07:00:00 GMT-0700 (PDT)']
+  }
+
+  // look up map vs foreach
+  usagedata['4444'].timestamp.forEach(function(t,index){
+      usagedata['4444'].timestamp[index] = new Date(t).getTime();
+  });
+
+  window.usagedata = usagedata;
+  console.log(usagedata);
+
+  plotLineChart(usagedata);
+
+
+function plotLineChart(data){
+  // Wrapping in nv.addGraph allows for '0 timeout render', stores rendered charts in nv.graphs, and may do more in the future... it's NOT required
+  var chart;
+
+
+  nv.addGraph(function() {
+    chart = nv.models.lineChart();
+
+    // chart
+    //     .x(function(d,i) { return i })
+
+
+    chart.xAxis
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+
+    chart.yAxis
+        .axisLabel('Voltage (v)')
+        .tickFormat(d3.format(',.2f'));
+
+    d3.select('#chart1 svg')
+        //.datum([]) //for testing noData
+        .datum(formatData(data))
+      .transition().duration(500)
+        .call(chart);
+
+    //TODO: Figure out a good way to do this automatically
+    nv.utils.windowResize(chart.update);
+    //nv.utils.windowResize(function() { d3.select('#chart1 svg').call(chart) });
+
+    chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+
+    return chart;
+  });
+
+  function formatData(data) {
+
+
+    var result = [];
+    var tempTime,
+        deviceNames = Object.getOwnPropertyNames(data);
+    for (var nDev = 0; nDev < deviceNames.length; nDev++){
+      
+      var socket1 = [],  
+          socket2 = [];
+
+      for (var i = 0; i < data[deviceNames[nDev]].socket1.length; i++) {
+        tempTime = new Date(data[deviceNames[nDev]].timestamp[i]).getTime();
+        socket1.push({x: tempTime, y: data[deviceNames[nDev]].socket1[i]});
+        socket2.push({x: tempTime, y: data[deviceNames[nDev]].socket2[i]});
+      }
+
+      result.push({
+        values: socket1,
+        key: "Device: " + deviceNames[nDev] + " Socket #1",
+      });
+      result.push({
+        values: socket2,
+        key: "Device: " + deviceNames[nDev] + " Socket #2",
+      });
+
+    }
+    
+    return result;
+  }
+}
+
+</script>

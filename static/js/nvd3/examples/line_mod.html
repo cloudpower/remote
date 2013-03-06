@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href="../src/nv.d3.css" rel="stylesheet" type="text/css">
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+</style>
+<body>
+
+<svg id="test1"></svg>
+
+<script src="../lib/d3.v2.js"></script>
+<script src="../nv.d3.js"></script>
+<script src="../src/models/legend.js"></script>
+<script src="../src/models/line.js"></script>
+<script>
+
+
+
+//Format A
+nv.addGraph({
+  generate: function() {
+    var width = nv.utils.windowSize().width - 40,
+        height = nv.utils.windowSize().height - 40;
+
+    var chart = nv.models.line()
+                .width(width)
+                .height(height)
+                .margin({top: 20, right: 20, bottom: 20, left: 20})
+
+
+    d3.select('#test1')
+      .attr('width', width)
+      .attr('height', height)
+      .datum(theData())
+      .call(chart);
+
+    return chart;
+  },
+  callback: function(graph) {
+    window.onresize = function() {
+      var width = nv.utils.windowSize().width - 40,
+          height = nv.utils.windowSize().height - 40,
+          margin = graph.margin();
+
+
+      if (width < margin.left + margin.right + 20)
+        width = margin.left + margin.right + 20;
+
+      if (height < margin.top + margin.bottom + 20)
+        height = margin.top + margin.bottom + 20;
+
+
+      graph
+         .width(width)
+         .height(height);
+
+      d3.select('#test1')
+        .attr('width', width)
+        .attr('height', height)
+        .call(graph);
+    };
+  }
+});
+
+
+
+
+
+function theData() {
+
+  var usagedata = {};
+  usagedata['4444'] = {
+    socket1: [ 1.1,  0.85, 0.8, 0.1, 0.75 ],
+    socket2: [ 1.72, 0.15, 0.2, 0.85, 0.22],
+    timestamp:
+      [ 'Mon Apr 25 2013 07:00:00 GMT-0700 (PDT)',
+        'Sun May 05 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 11 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 17 2013 07:00:00 GMT-0700 (PDT)',
+        'Sat May 18 2013 07:00:00 GMT-0700 (PDT)' ]
+  }
+
+  // look up map vs foreach
+  usagedata['4444'].timestamp.forEach(function(t,index){
+      usagedata['4444'].timestamp[index] = new Date(t).getTime();
+  });
+
+
+  console.log(usagedata);
+
+  data = usagedata;
+
+
+    var socket1 = [],  
+        socket2 = [];
+
+ 
+
+  for (var i = 0; i < 5; i++) {
+    socket1.push({x: data['4444'].timestamp[i], y: data['4444'].socket1[i]});
+    socket2.push({x: data['4444'].timestamp[i], y: data['4444'].socket2[i]});
+  }
+
+  console.log(socket1);
+  console.log(socket2);
+
+  return [
+    {
+      values: socket1,
+      key: "Socket #1",
+      color: "#ff7f0e"
+    },
+    {
+      values: socket2,
+      key: "Socket #2",
+      color: "#2ca02c"
+    }
+  ];
+}
+
+
+</script>
