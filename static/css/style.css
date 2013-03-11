@@ -1,16 +1,26 @@
 body{
-	font-family: sans-serif;
+	font-family: 'Roboto Condensed', sans-serif;;
 	font-weight: lighter;
+}
+td{
+	width: 33%;
+	height: 50px;
+	border: 1pt dotted rgba(46, 50, 52, 0.35);
+	text-align: center;
+}
+#devicesTable{
+	width: 100%;
 }
 
 .wrapper{
-	width: 600px;
+	width: 80%;
 	margin: 0 auto;
 }
 .header{
 	width: 100%;
 	height: 50px;
-	font-size: 2em;
+	font-size: 30pt;
+	text-align: center;
 	margin: 0 0 0 0;
 	padding: 10px 10px 20px 10px;
 	background: rgba(46,50,52,1.0);
@@ -19,7 +29,8 @@ body{
 	border-radius: 5px 5px 0 0;
 	color: white;
 }
-.content{
+
+#statusDiv{
 	font-size: 18px;
 	width: 100%;
 	-webkit-background-clip: border-box;
@@ -29,14 +40,88 @@ body{
 	-webkit-font-smoothing: antialiased;
 	background-attachment: scroll;
 	background-clip: border-box;
-	background-color: rgba(46, 50, 52, 0.0980392);
+	/*background-color: rgba(46, 50, 52, 0.0980392);*/
 	background-image: none;
 	background-origin: padding-box;
 	background-size: auto;
 	/*box-shadow: rgba(0, 0, 0, 0.0980392) 0px 0px 0px 1px, rgba(0, 0, 0, 0.0980392) 0px 1px 0px 0px;*/
 	color: rgb(0, 0, 0);
 	padding: 10px 10px 20px 10px;
+	/*border-top:4px dashed rgba(46,50,52,1.0);
+	border-bottom:4px dashed rgba(46,50,52,1.0);*/
 }
 #status{
 	display: inline;
+}
+
+#usageDiv{
+	display: inline;
+}
+#calendar
+{
+	width: 900px;
+	font-size:85pt;
+	color: #555;
+	padding: 0px 0 0 0px;
+	margin: 0px 0 0 0px;
+	cursor:pointer;
+
+
+}
+#chart
+{
+	padding: 0px 0 0 0;
+	/*position: relative;
+	z-index:-1;*/
+
+}
+
+/* DROPDOWN MENU */
+
+
+.dropdown 
+{
+color: #555;
+margin: 3px -22px 0 0;
+width: 900px;
+font-size:85pt;
+position: relative;
+text-align:left;
+}
+.submenu
+{
+background: #fff;
+position: absolute;
+top: 125px; /* top of the drop menu*/
+left: -20px;
+z-index: 100;
+width: 135px;
+display: none;
+margin-left: 10px;
+padding: 0px 0 0px 0px;
+border-radius: 6px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+.dropdown li
+{
+color: #555555;
+display: block;
+font-weight: bold;
+padding: 6px 15px;
+cursor: pointer;
+border-top:1px solid #dedede;
+}
+
+.dropdown li:hover
+{
+background:#555FB0;
+color: #FFFFFF;
+}
+.root
+{
+list-style:none;
+margin:0px;
+padding:0px;
+font-size: 11px;
+padding: 0px 0  0px;
 }

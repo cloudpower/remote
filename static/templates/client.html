@@ -1,24 +1,84 @@
 <html>
 <head>
 	<title>cloudpower</title>
-	<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+	<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0"  />
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="static/css/style.css"/>
+	
+	<link href="static/js/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="static/css/focuschart.css"> 
 </head>
+
+
+
 
 <body>
 	<div class="wrapper">
 		<div class="header">
-			Cloudpower v1 Demo
+			CLOUDPOWER
 		</div>
-		<div class="content">
+		<a style="font-size:85pt; color: #555;"><img id="status_img" src="static/templates/switch.png"> STATUS</a>
+		<div id="statusDiv">
+			<table id="devicesTable">
+			</table>
 			status: <div id="status"></div><br/>
 			<button id="on">on</button> <button id="off">off</button><br/>
-			
 		</div>
-	</div>
 	
-	<script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
+ 
+
+		<div id="usageDiv" align=center>
+			<div class="dropdown" style="width:80%">
+
+				<div id="calendar" >
+					<img id="calendar_img" src="static/templates/calendar.png"></img>
+					<a id="calendar_text">
+						LAST WEEK
+					</a>
+				</div>
+
+				<div class="submenu">
+					<ul class="root">
+					<li id="lastweek">LAST WEEK</li>
+					<li id="lastmonth">LAST MONTH</li>
+					<li id="lastyear">LAST YEAR</li>
+					<li id="alltime">ALL TIME</li>
+					<li id="custom">CUSTOM...</li>
+					</ul>
+				</div>
+
+			</div>
+
+			<div id="chart" align="center">
+		    	<svg style="height: 750px;"></svg>
+		  	</div>
+	  	</div>
+	
+	</div>
+
+
+	<script type="text/javascript" src="static/js/jquery-1.9.1.min.js"></script>
+	<script src="static/js/nvd3/lib/d3.v2.js"></script>
+	<script src="static/js/nvd3/nv.d3.js"></script>
+	<script src="static/js/nvd3/src/tooltip.js"></script>
+	<script src="static/js/nvd3/src/utils.js"></script>
+	<script src="static/js/nvd3/src/models/legend.js"></script>
+	<script src="static/js/nvd3/src/models/axis.js"></script>
+	<script src="static/js/nvd3/src/models/scatter.js"></script>
+	<script src="static/js/nvd3/src/models/line.js"></script>
+	<script src="static/js/nvd3/src/models/lineWithFocusChart.js"></script>
+	<script src="static/js/nvd3/examples/stream_layers.js"></script>
+	<script src="static/js/focuschart.js"></script>
+
+
+
 	<script type="text/javascript">
+
+	var MASTER_USERNAME = "Drew";
+	setupStatus(MASTER_USERNAME); // SETUP THE STATUS TABLES
+
+	
+
 		$("#on").click(function(){
 			$("#status").text('pending...');
 			$.post('/api/v1/device/device-0/3', {
@@ -46,7 +106,148 @@
 				}
 			});
 		});
+
+	function newPlot(username,startDate,endDate){
+		
+		$.get('/api/v1/user/' + username + '/usage/'+startDate+'/'+endDate, function(data){
+				if (data.hasOwnProperty('error')){
+					$("#status").text(data.error);
+				}
+				else {
+					console.log(data)
+					plotLineChartWithFocus(data);
+				}
+		});
+	}
+
+	function findDevices(username){
+		var d = new $.Deferred;
+		$.get('/api/v1/user/' + username + '/devices', function(data){
+				if (data.hasOwnProperty('error')){
+					$("#status").text(data.error);
+				}
+				else {
+					d.resolve(data);
+				}
+		});
+		return d.promise();
+	}
+	
+	function findCreation(username){
+		var d = new $.Deferred;
+		$.get('/api/v1/user/' + username + '/creation', function(data){
+				if (data.hasOwnProperty('error')){
+					$("#status").text(data.error);
+				}
+				else {
+					d.resolve(data);
+				}
+		});
+		return d.promise();
+	}
+
+	// set up the status bar by finding the number of devices and making a table	
+	function setupStatus(){
+		$.when(findDevices(MASTER_USERNAME)).then(function(devices){
+			$('#devicesTable').append('<tr class="child"><td><b>DEVICE</b></td><td><b>SOCKET 1</b></td><td><b>SOCKET 2</b></td></tr>');
+			for( var i = 0; i < devices.length; i ++){
+				$('#devicesTable').append('<tr class="child"><td>'+devices[i]+'</td><td> ON/OFF </td><td> ON/OFF </td></tr>');
+			}
+		},function(){
+			console.log('Fail');
+		});
+		
+	}
+
+	//newPlot(MASTER_USERNAME,'1362124800000','1368601200000');
+	
+	
+
+		
+		$(document).ready(function()
+		{
+			$("#lastmonth").trigger('click'); // BY DEFAULT LAST MONTH
+
+			$("#calendar").on('click',function()
+			{
+				var X=$(this).attr('name');
+				if(X==1){
+					$(".submenu").hide();
+					$(this).attr('name', '0'); 
+				}
+				else{
+					$(".submenu").show();
+					$(this).attr('name', '1');
+				}
+
+			});
+		});
+
+				//Mouse click on sub menu
+		$(".submenu").mouseup(function()
+		{
+		return false
+		});
+
+		//Mouse click on my account link
+		$("#calendar").mouseup(function()
+		{
+		return false
+		});
+
+		$(".submenu").on('click',function(){
+			$(".submenu").hide();
+			$("#calendar").attr('name', '0');
+		});
+
+		//Document Click
+		$(document).mouseup(function()
+		{
+			$(".submenu").hide();
+			$("#calendar").attr('name', '0'); 
+		});
+
+
+
+		$("#lastweek").on('click',function(){
+			var endDate = new Date();
+			var startDate = new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()-7);
+			$('#calendar_text').text('LAST WEEK');		
+			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+		});
+
+		$("#lastmonth").on('click',function(){
+			var endDate = new Date();
+			var startDate = new Date(endDate.getFullYear(),endDate.getMonth()-1,endDate.getDate());
+			$('#calendar_text').text('LAST MONTH');		
+			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+		});
+
+		$("#lastyear").on('click',function(){
+			var endDate = new Date();
+			var startDate = new Date(endDate.getFullYear()-1,endDate.getMonth(),endDate.getDate());	
+			$('#calendar_text').text('LAST YEAR');			
+			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+		});
+		$("#alltime").on('click',function(){
+
+			$.when(findCreation(MASTER_USERNAME)).then(function(result){
+				var endDate = new Date();
+				var startDate = new Date(result.rows[0].creation_date);
+				$('#calendar_text').text('ALL TIME');			
+				newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+			},function(){
+				console.log('Fail');
+			});
+
+		});
+
+
+
+
 	</script>
+
+
 
 </body>
 
