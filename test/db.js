@@ -4,7 +4,7 @@ var Db = require('../lib/db.js'),
     sequence = require('sequence'),
     assert = require('assert');
 
-var myDatabase = Db.create('tcp://localhost'); // the db refers to the exported methods of "Db.js"
+var myDatabase = Db.create('tcp://localhost/cloudpower_test'); // the db refers to the exported methods of "Db.js"
 
 // }); // first input param of "then" is "if sucess" and the second is "if fail" then(success,fail)
 
@@ -40,7 +40,7 @@ describe('Database', function(){
 
 	// INSERT VALUES into USERS
 	it('insert some values into users table',function(done){
-		myDatabase.insertUser('Drew','drew@drew.com', new Date()).then(function(){
+		myDatabase.insertUser('Drew','drew@drew.com', new Date(2010,9,3)).then(function(){
 			console.log("Inserted user.");
 			return done();
 		}, function(err){
@@ -52,7 +52,7 @@ describe('Database', function(){
 
 	// INSERT VALUES into USERS
 	it('insert some values into users table',function(done){
-		myDatabase.insertUser('Nathan','nathan@drew.com', new Date()).then(function(){
+		myDatabase.insertUser('Nathan','nathan@drew.com', new Date(1990,12,11)).then(function(){
 			console.log("Inserted user.");
 			return done();
 		}, function(err){
@@ -96,7 +96,7 @@ describe('Database', function(){
 
 	// INSERT VALUES into USAGEDATA
 	it('insert some values into users table',function(done){
-		myDatabase.logUsage('4444',new Date(2013,3,15),0.1,0.2).then(function(){
+		myDatabase.logUsage('4444',new Date(2013,1,15),0.1,0.2).then(function(){
 			console.log("Inserted data.");
 			return done();
 		}, function(err){
@@ -106,7 +106,7 @@ describe('Database', function(){
 	});
 
 	it('insert some values into users table',function(done){
-		myDatabase.logUsage('4444',new Date(2013,4,11),0.8,0.8).then(function(){
+		myDatabase.logUsage('4444',new Date(2013,1,11),0.8,0.8).then(function(){
 			console.log("Inserted data.");
 			return done();
 		}, function(err){
@@ -116,19 +116,7 @@ describe('Database', function(){
 	});
 
 	it('insert some values into users table',function(done){
-		myDatabase.logUsage('4444',new Date(2013,4,5),0.5,0.55).then(function(){
-			console.log("Inserted data.");
-			return done();
-		}, function(err){
-			console.log(err);
-			myDatabase.disconnect();
-		});
-	});
-
-		// INSERT VALUES into USAGEDATA
-	it('insert some values into users table',function(done){
-
-		myDatabase.logUsage('9999',new Date(2013,4,10),0.6,0.6).then(function(){
+		myDatabase.logUsage('4444',new Date(2013,2,5),0.5,0.55).then(function(){
 			console.log("Inserted data.");
 			return done();
 		}, function(err){
@@ -140,7 +128,58 @@ describe('Database', function(){
 		// INSERT VALUES into USAGEDATA
 	it('insert some values into users table',function(done){
 
-		myDatabase.logUsage('9999',new Date(2013,4,5),1.1,1.6).then(function(){
+		myDatabase.logUsage('9999',new Date(2013,1,10),0.6,0.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2013,2,3),0.6,0.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+	it('insert some values into users table',function(done){
+		myDatabase.logUsage('4444',new Date(2013,2,10),0.38,1.28).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2013,1,29),2.6,0.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2013,1,22),0.8,0.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+		// INSERT VALUES into USAGEDATA
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2013,1,5),1.1,1.6).then(function(){
 			console.log("Inserted data.");
 			return done();
 		}, function(err){
@@ -153,7 +192,17 @@ describe('Database', function(){
 		// INSERT VALUES into USAGEDATA
 	it('insert some values into users table',function(done){
 
-		myDatabase.logUsage('9999',new Date(2013,3,27),0.6,0.6).then(function(){
+		myDatabase.logUsage('9999',new Date(2013,0,27),0.6,0.6).then(function(){
+			console.log("Inserted data.");
+			return done();
+		}, function(err){
+			console.log(err);
+			myDatabase.disconnect();
+		});
+	});
+	it('insert some values into users table',function(done){
+
+		myDatabase.logUsage('9999',new Date(2012,5,27),0.6,0.6).then(function(){
 			console.log("Inserted data.");
 			return done();
 		}, function(err){

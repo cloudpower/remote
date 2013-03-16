@@ -125,3 +125,15 @@ padding:0px;
 font-size: 11px;
 padding: 0px 0  0px;
 }
+
+#startdatepicker{
+height: 70px;
+width:190px;
+font-size: 22pt;
+
+}
+#enddatepicker{
+height: 70px;
+width:190px;
+font-size: 22pt;
+}

@@ -7,6 +7,8 @@
 	
 	<link href="static/js/nvd3/src/nv.d3.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" type="text/css" href="static/css/focuschart.css"> 
+
+	<link rel="stylesheet" href="static/js/jquery-ui-1.10.1.custom/css/overcast/jquery-ui-1.10.1.custom.min.css" />
 </head>
 
 
@@ -14,8 +16,9 @@
 
 <body>
 	<div class="wrapper">
+
 		<div class="header">
-			CLOUDPOWER
+			C L O U D P O W E R
 		</div>
 		<a style="font-size:85pt; color: #555;"><img id="status_img" src="static/templates/switch.png"> STATUS</a>
 		<div id="statusDiv">
@@ -32,9 +35,7 @@
 
 				<div id="calendar" >
 					<img id="calendar_img" src="static/templates/calendar.png"></img>
-					<a id="calendar_text">
-						LAST WEEK
-					</a>
+					<a id="calendar_text"></a>
 				</div>
 
 				<div class="submenu">
@@ -43,7 +44,6 @@
 					<li id="lastmonth">LAST MONTH</li>
 					<li id="lastyear">LAST YEAR</li>
 					<li id="alltime">ALL TIME</li>
-					<li id="custom">CUSTOM...</li>
 					</ul>
 				</div>
 
@@ -53,7 +53,8 @@
 		    	<svg style="height: 750px;"></svg>
 		  	</div>
 	  	</div>
-	
+
+
 	</div>
 
 
@@ -69,6 +70,7 @@
 	<script src="static/js/nvd3/src/models/lineWithFocusChart.js"></script>
 	<script src="static/js/nvd3/examples/stream_layers.js"></script>
 	<script src="static/js/focuschart.js"></script>
+    <script src="static/js/jquery-ui-1.10.1.custom/js/jquery-ui-1.10.1.custom.min.js"></script>
 
 
 
@@ -158,17 +160,13 @@
 		});
 		
 	}
-
-	//newPlot(MASTER_USERNAME,'1362124800000','1368601200000');
-	
 	
 
-		
 		$(document).ready(function()
 		{
 			$("#lastmonth").trigger('click'); // BY DEFAULT LAST MONTH
 
-			$("#calendar").on('click',function()
+			$("#calendar_img").on('click',function()
 			{
 				var X=$(this).attr('name');
 				if(X==1){
@@ -183,33 +181,23 @@
 			});
 		});
 
-				//Mouse click on sub menu
-		$(".submenu").mouseup(function()
-		{
-		return false
-		});
-
-		//Mouse click on my account link
-		$("#calendar").mouseup(function()
-		{
-		return false
-		});
 
 		$(".submenu").on('click',function(){
 			$(".submenu").hide();
-			$("#calendar").attr('name', '0');
+			$("#calendar_img").attr('name', '0');
 		});
 
 		//Document Click
 		$(document).mouseup(function()
 		{
 			$(".submenu").hide();
-			$("#calendar").attr('name', '0'); 
+			$("#calendar_img").attr('name', '0'); 
 		});
 
 
 
 		$("#lastweek").on('click',function(){
+			//$('#customdate').hide();
 			var endDate = new Date();
 			var startDate = new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()-7);
 			$('#calendar_text').text('LAST WEEK');		
@@ -239,11 +227,8 @@
 			},function(){
 				console.log('Fail');
 			});
-
 		});
-
-
-
+   
 
 	</script>
 

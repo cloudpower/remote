@@ -12,7 +12,7 @@ var app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     connectedDevices = {},
-    db = Db.create('tcp://localhost');
+    db = Db.create('tcp://localhost/cloudpower_prod');
 
 // set up the Express static file serving
 // @todo replace with nginx for this stuff
