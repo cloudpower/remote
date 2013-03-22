@@ -184,7 +184,7 @@ io.sockets.on('connection', function (socket) {
             delete connectedDevices[deviceId];
         });
         socket.on('usage-data', function(data){
-            db.insertUsageData(deviceId, new Date(), data['0'].power, data['1'].power);
+            db.logUsage(deviceId, new Date(), data['0'].power, data['1'].power);
         });
     });
 });
