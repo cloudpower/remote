@@ -3,8 +3,6 @@
 var express = require('express'),
     fs = require('fs'),
     guid = require('guid'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
     p = require('ua-parser'),
     Db = require('./lib/db');
 
