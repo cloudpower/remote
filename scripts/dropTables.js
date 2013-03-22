@@ -1,7 +1,24 @@
 "use strict";
 
-var Db = require('../lib/db.js');
-var myDatabase = Db.create('tcp://localhost/cloudpower_prod');
+var Db = require('../lib/db.js'),
+	nconf = require('nconf');
+
+nconf.file(__dirname + '/../config.json');
+
+nconf.defaults({
+    'user': '',
+    'password': '',
+    'host': 'localhost',
+    'port': 5432
+});
+
+var myDatabase = Db.create({
+    'user': nconf.get('postgresUser'),
+    'password': nconf.get('postgresPassword'),
+    'host': nconf.get('postgresHost'),
+    'port': nconf.get('postgresPort'),
+    'db': nconf.get('postgresDb')
+});
 
 //DELETE TABLES
 myDatabase.connect().then(function(){

@@ -4,19 +4,34 @@ var express = require('express'),
     fs = require('fs'),
     guid = require('guid'),
     p = require('ua-parser'),
-    Db = require('./lib/db');
+    Db = require('./lib/db'),
+    nconf = require('nconf');
+
+nconf.file(__dirname + '/config.json');
+
+nconf.defaults({
+    'user': '',
+    'password': '',
+    'host': 'localhost',
+    'port': 5432
+});
 
 var app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     connectedDevices = {},
-    db = Db.create('tcp://localhost/cloudpower_prod');
+    db = Db.create({
+        'user': nconf.get('postgresUser'),
+        'password': nconf.get('postgresPassword'),
+        'host': nconf.get('postgresHost'),
+        'port': nconf.get('postgresPort'),
+        'db': nconf.get('postgresDb')
+    });
 
 // set up the Express static file serving
 // @todo replace with nginx for this stuff
 app.use("/static", express.static(__dirname + '/static'));
 app.use(express.bodyParser());
-app.use(passport.initialize());
 app.use(app.router);
 
 // these should be templated/bootstrapped to prevent excessive AJAXing

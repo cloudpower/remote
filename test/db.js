@@ -2,11 +2,25 @@
 
 var Db = require('../lib/db.js'),
     sequence = require('sequence'),
-    assert = require('assert');
+    assert = require('assert'),
+    nconf = require('nconf');
 
-var myDatabase = Db.create('tcp://localhost/cloudpower_test'); // the db refers to the exported methods of "Db.js"
+nconf.file(__dirname + '/../config.json');
 
-// }); // first input param of "then" is "if sucess" and the second is "if fail" then(success,fail)
+nconf.defaults({
+    'user': '',
+    'password': '',
+    'host': 'localhost',
+    'port': 5432,
+});
+
+var myDatabase = Db.create({
+    'user': nconf.get('postgresUser'),
+    'password': nconf.get('postgresPassword'),
+    'host': nconf.get('postgresHost'),
+    'port': nconf.get('postgresPort'),
+    'db': 'cloudpower_test'
+});
 
 describe('Database', function(){
 

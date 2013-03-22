@@ -1,0 +1,7 @@
+{
+    "postgresHost": "",
+    "postgresPort": 5432,
+    "postgresUser": "",
+    "postgresPassword": "",
+    "postgresDb": "cloudpower_prod"
+}
