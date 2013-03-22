@@ -258,42 +258,15 @@ describe('Database', function(){
 	});
 
 	// // DELETE the tables.
-	// it('should delete tables', function(done){
-	// 	myDatabase.deleteTables().then(function(){
-	// 		console.log("Tables deleted successfully.");
-	// 		myDatabase.disconnect();
-	// 		return done();
-	// 	}, function(err){
-	// 		console.log('error: ' + err);
-	// 		myDatabase.disconnect();
-	// 	});
-	// });
+	it('should delete tables', function(done){
+		myDatabase.deleteTables().then(function(){
+			console.log("Tables deleted successfully.");
+			myDatabase.disconnect();
+			return done();
+		}, function(err){
+			console.log('error: ' + err);
+			myDatabase.disconnect();
+		});
+	});
 
 });
-
-
-// sequence().then(function(next){ // CONNECT TO SEVER
-// 	myDatabase.connect().then(function(){
-// 		console.log("Connected.");
-// 		return next();
-// 	}, function(err){
-// 		console.log('error: ' + err);
-// 		myDatabase.disconnect();
-// 	});
-// }).then(function(next){ // MAKE TABLES
-// 	myDatabase.createTables().then(function(){
-// 		console.log("Tables created successfully.");
-// 		return next();
-// 	}, function(err){
-// 		console.log('error: ' + err);
-// 		myDatabase.disconnect();
-// 	});
-// }).then(function(next){ // DELETE TABLES
-// 	myDatabase.deleteTables().then(function(){
-// 		console.log("Tables deleted successfully.");
-// 		myDatabase.disconnect();
-// 	}, function(err){
-// 		console.log('error: ' + err);
-// 		myDatabase.disconnect();
-// 	});
-// });

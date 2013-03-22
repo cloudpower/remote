@@ -21,20 +21,6 @@ app.use(express.bodyParser());
 app.use(passport.initialize());
 app.use(app.router);
 
-// // set up the user authentication
-// passport.use(new LocalStrategy(
-//     function(username, password, done) {
-//         db.authenticate(username, password).then(function() {
-//             return done(null, {
-//                 'username': username
-//             });
-//         }, function(err){
-//             return done(err);
-//         });
-//     }
-// ));
-
-
 // these should be templated/bootstrapped to prevent excessive AJAXing
 app.get('/', function(req, res){
     var os = p.parseOS(req.headers['user-agent']).toString();
@@ -170,31 +156,31 @@ app.get('/api/v1/id', function(req, res){
 });
 
 // // USER ROUTES
-// app.get('/api/v1/authenticate', passport.authenticate('local', { session: false }), function(req, res){
-//     res.send('hello');
-// });
+app.get('/api/v1/authenticate', passport.authenticate('local', { session: false }), function(req, res){
+    res.send('hello');
+});
 
-// app.get('/api/v1/user/:username', function(req, res){
-//     db.getUser(req.params.username).then(function(user){
-//         // success
-//         res.send(user);
-//     }, function(){
-//         // failure
-//         res.send(404);
-//     });
-// });
+app.get('/api/v1/user/:username', function(req, res){
+    db.selectUser(req.params.username).then(function(user){
+        // success
+        res.send(user);
+    }, function(){
+        // failure
+        res.send(404);
+    });
+});
 
-// app.post('/api/v1/user', function(req, res){
-//     db.insertUser(req.body.username, req.body.password).then(function(){
-//         //success
-//         res.send({
-//             'username': req.body.username
-//         });
-//     }, function(){
-//         // failure
-//         res.send(500);
-//     });
-// });
+app.post('/api/v1/user', function(req, res){
+    db.insertUser(req.body.username, req.body.email, new Date()).then(function(){
+        //success
+        res.send({
+            'username': req.body.username
+        });
+    }, function(){
+        // failure
+        res.send(500);
+    });
+});
 
 // WebSocket routes
 io.sockets.on('connection', function (socket) {
