@@ -84,7 +84,7 @@
 
 		$("#on").click(function(){
 			$("#status").text('pending...');
-			$.post('/api/v1/device/device-0/3', {
+			$.post('/api/v1/device/device-0/0', {
 				'state': 1
 			}, function(data){
 				if (data.hasOwnProperty('error')){
@@ -98,7 +98,7 @@
 		});
 		$("#off").click(function(){
 			$("#status").text('pending...');
-			$.post('/api/v1/device/device-0/3', {
+			$.post('/api/v1/device/0/0', {
 				'state': 0
 			}, function(data){
 				if (data.hasOwnProperty('error')){
