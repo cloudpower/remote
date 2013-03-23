@@ -162,81 +162,82 @@
 		
 	}
 	
-		var currentState;
+	var currentState;
 
-		$(document).ready(function()
-		{
-			currentState = "lastweek"; //default value
-			setInterval(function(){
-				$("#" + currentState).trigger('click');
-			},30000);
-
-			$("#calendar_img").on('click',function()
-			{
-				var X=$(this).attr('name');
-				if(X==1){
-					$(".submenu").hide();
-					$(this).attr('name', '0'); 
-				}
-				else{
-					$(".submenu").show();
-					$(this).attr('name', '1');
-				}
-
-			});
-		});
-
-
-		$(".submenu").on('click',function(){
-			$(".submenu").hide();
-			$("#calendar_img").attr('name', '0');
-		});
-
-		//Document Click
-		$(document).mouseup(function()
-		{
-			$(".submenu").hide();
-			$("#calendar_img").attr('name', '0'); 
-		});
-
+	$(document).ready(function()
+	{
+		$("#lastweek").trigger('click'); // default
 		
+		setInterval(function(){
+			$("#" + currentState).trigger('click');
+		},30000);
+
+		$("#calendar_img").on('click',function()
+		{
+			var X=$(this).attr('name');
+			if(X==1){
+				$(".submenu").hide();
+				$(this).attr('name', '0'); 
+			}
+			else{
+				$(".submenu").show();
+				$(this).attr('name', '1');
+			}
+
+		});
+	});
+
+
+	$(".submenu").on('click',function(){
+		$(".submenu").hide();
+		$("#calendar_img").attr('name', '0');
+	});
+
+	//Document Click
+	$(document).mouseup(function()
+	{
+		$(".submenu").hide();
+		$("#calendar_img").attr('name', '0'); 
+	});
+
+	
 
 
 
-		$("#lastweek").on('click',function(){
-			currentState = "lastweek";
+	$("#lastweek").on('click',function(){
+		currentState = "lastweek";
+		var endDate = new Date();
+		var startDate = new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()-7);
+		$('#calendar_text').text('LAST WEEK');		
+		newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+	});
+
+	$("#lastmonth").on('click',function(){
+		currentState = "lastmonth";
+		var endDate = new Date();
+		var startDate = new Date(endDate.getFullYear(),endDate.getMonth()-1,endDate.getDate());
+		$('#calendar_text').text('LAST MONTH');		
+		newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+	});
+
+	$("#lastyear").on('click',function(){
+		currentState = "lastyear";
+		var endDate = new Date();
+		var startDate = new Date(endDate.getFullYear()-1,endDate.getMonth(),endDate.getDate());	
+		$('#calendar_text').text('LAST YEAR');			
+		newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+	});
+	$("#alltime").on('click',function(){
+		currentState = "alltime";
+		$.when(findCreation(MASTER_USERNAME)).then(function(result){
 			var endDate = new Date();
-			var startDate = new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()-7);
-			$('#calendar_text').text('LAST WEEK');		
+			var startDate = new Date(result.rows[0].creation_date);
+			$('#calendar_text').text('ALL TIME');			
 			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
+		},function(){
+			console.log('Fail');
 		});
-
-		$("#lastmonth").on('click',function(){
-			currentState = "lastmonth";
-			var endDate = new Date();
-			var startDate = new Date(endDate.getFullYear(),endDate.getMonth()-1,endDate.getDate());
-			$('#calendar_text').text('LAST MONTH');		
-			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
-		});
-
-		$("#lastyear").on('click',function(){
-			currentState = "lastyear";
-			var endDate = new Date();
-			var startDate = new Date(endDate.getFullYear()-1,endDate.getMonth(),endDate.getDate());	
-			$('#calendar_text').text('LAST YEAR');			
-			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
-		});
-		$("#alltime").on('click',function(){
-			currentState = "alltime";
-			$.when(findCreation(MASTER_USERNAME)).then(function(result){
-				var endDate = new Date();
-				var startDate = new Date(result.rows[0].creation_date);
-				$('#calendar_text').text('ALL TIME');			
-				newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
-			},function(){
-				console.log('Fail');
-			});
-		});
+	});
    
 
 	</script>
