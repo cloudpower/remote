@@ -18,13 +18,12 @@
 	<div class="wrapper">
 
 		<div class="header">
-			C L O U D P O W E R
+			<img id="logo" src="static/img/logo.png">
 		</div>
-		<a style="font-size:85pt; color: #555;"><img id="status_img" src="static/templates/switch.png"> STATUS</a>
+		<a style="font-size:85pt; color: #555;"><img id="status_img" src="static/img/switch.png"> STATUS</a>
 		<div id="statusDiv">
 			<table id="devicesTable">
 			</table>
-			status: <div id="status"></div><br/>
 			<button id="on">on</button> <button id="off">off</button><br/>
 		</div>
 	
@@ -34,7 +33,7 @@
 			<div class="dropdown" style="width:80%">
 
 				<div id="calendar" >
-					<img id="calendar_img" src="static/templates/calendar.png"></img>
+					<img id="calendar_img" src="static/img/calendar.png"></img>
 					<a id="calendar_text"></a>
 				</div>
 
@@ -82,33 +81,7 @@
 
 	
 
-		$("#on").click(function(){
-			$("#status").text('pending...');
-			$.post('/api/v1/device/device-0/0', {
-				'state': 1
-			}, function(data){
-				if (data.hasOwnProperty('error')){
-					$("#status").text(data.error);
-				}
-				else {
-					$("#status").text('the state of outlet ' + data.outlet + ' is ' + data.state);
-				}
-				
-			});
-		});
-		$("#off").click(function(){
-			$("#status").text('pending...');
-			$.post('/api/v1/device/0/0', {
-				'state': 0
-			}, function(data){
-				if (data.hasOwnProperty('error')){
-					$("#status").text(data.error);
-				}
-				else {
-					$("#status").text('the state of outlet ' + data.outlet + ' is ' + data.state);
-				}
-			});
-		});
+
 
 	function newPlot(username,startDate,endDate){
 		
@@ -154,7 +127,64 @@
 		$.when(findDevices(MASTER_USERNAME)).then(function(devices){
 			$('#devicesTable').append('<tr class="child"><td><b>DEVICE</b></td><td><b>SOCKET 1</b></td><td><b>SOCKET 2</b></td></tr>');
 			for( var i = 0; i < devices.length; i ++){
-				$('#devicesTable').append('<tr class="child"><td>'+devices[i]+'</td><td> ON/OFF </td><td> ON/OFF </td></tr>');
+
+				$('#devicesTable').append('<tr class="child"><td>'+devices[i]+'</td><td> <button id="on'+devices[i]+'Socket1">on</button> <button id="off'+devices[i]+'Socket1">off</button> </td><td><button id="on'+devices[i]+'Socket2">on</button> <button id="off'+devices[i]+'Socket2">off</button></td></tr>');
+
+				$('#on'+devices[i]+'Socket1').click(function(){
+					$("#status").text('pending...');
+					$.post('/api/v1/device/'+devices[i]+'/0', {
+					'state': 1
+					}, function(data){
+						if (data.hasOwnProperty('error')){
+							console.log('Socket 1: ' + data.error);
+						}
+						else {
+							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+						}
+					});
+				});
+				$('#off'+devices[i]+'Socket1').click(function(){
+					$("#status").text('pending...');
+					$.post('/api/v1/device/'+devices[i]+'/0', {
+						'state': 0
+					}, function(data){
+						if (data.hasOwnProperty('error')){
+						$("#status").text('Socket 1: ' + data.error);
+						}
+						else {
+							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+						}
+					});
+				});
+
+				$('#on'+devices[i]+'Socket2').click(function(){
+					$("#status").text('pending...');
+					$.post('/api/v1/device/'+devices[i]+'/1', {
+					'state': 1
+					}, function(data){
+						if (data.hasOwnProperty('error')){
+							console.log('Socket 2: ' + data.error);
+						}
+						else {
+							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+						}
+					});
+				});
+				$('#off'+devices[i]+'Socket2').click(function(){
+					$("#status").text('pending...');
+					$.post('/api/v1/device/'+devices[i]+'/1', {
+						'state': 0
+					}, function(data){
+						if (data.hasOwnProperty('error')){
+						console.log('Socket 2: ' + data.error);
+						}
+						else {
+							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+						}
+					});
+				});
+
+
 			}
 		},function(){
 			console.log('Fail');
