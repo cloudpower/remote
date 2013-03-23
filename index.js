@@ -181,6 +181,7 @@ io.sockets.on('connection', function (socket) {
         connectedDevices[deviceId] = socket;
         socket.on('disconnect', function(){
             console.log(deviceId + ' disconnected');
+            db.logDisconnect(deviceId, new Date());
             delete connectedDevices[deviceId];
         });
         socket.on('usage-data', function(data){
