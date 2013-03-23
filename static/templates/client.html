@@ -79,6 +79,7 @@
 	var MASTER_USERNAME = "Drew";
 	setupStatus(MASTER_USERNAME); // SETUP THE STATUS TABLES
 
+
 	
 
 		$("#on").click(function(){
@@ -161,10 +162,14 @@
 		
 	}
 	
+		var currentState;
 
 		$(document).ready(function()
 		{
-			$("#lastmonth").trigger('click'); // BY DEFAULT LAST MONTH
+			currentState = "lastweek"; //default value
+			setInterval(function(){
+				$("#" + currentState).trigger('click');
+			},30000);
 
 			$("#calendar_img").on('click',function()
 			{
@@ -194,10 +199,12 @@
 			$("#calendar_img").attr('name', '0'); 
 		});
 
+		
+
 
 
 		$("#lastweek").on('click',function(){
-			//$('#customdate').hide();
+			currentState = "lastweek";
 			var endDate = new Date();
 			var startDate = new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate()-7);
 			$('#calendar_text').text('LAST WEEK');		
@@ -205,6 +212,7 @@
 		});
 
 		$("#lastmonth").on('click',function(){
+			currentState = "lastmonth";
 			var endDate = new Date();
 			var startDate = new Date(endDate.getFullYear(),endDate.getMonth()-1,endDate.getDate());
 			$('#calendar_text').text('LAST MONTH');		
@@ -212,13 +220,14 @@
 		});
 
 		$("#lastyear").on('click',function(){
+			currentState = "lastyear";
 			var endDate = new Date();
 			var startDate = new Date(endDate.getFullYear()-1,endDate.getMonth(),endDate.getDate());	
 			$('#calendar_text').text('LAST YEAR');			
 			newPlot(MASTER_USERNAME, startDate.getTime(), endDate.getTime());
 		});
 		$("#alltime").on('click',function(){
-
+			currentState = "alltime";
 			$.when(findCreation(MASTER_USERNAME)).then(function(result){
 				var endDate = new Date();
 				var startDate = new Date(result.rows[0].creation_date);
