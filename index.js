@@ -51,6 +51,17 @@ app.get('/', function(req, res){
 
 // API routes
 
+app.get('/api/v1/device/:device', function(req, res){
+    if (!connectedDevices.hasOwnProperty(req.params.device)){
+        return res.send({
+            'status': 'offline'
+        });
+    }
+    return res.send({
+        'status': 'online'
+    });
+});
+
 // POST - this is the 'set state'
 app.post('/api/v1/device/:device/:outlet', function(req, res){
     console.log('got a ' + req.body.state + ' state request for outlet ' + req.params.outlet +
@@ -111,7 +122,6 @@ app.get('/api/v1/user/:username/usage/:startDate/:endDate', function(req, res){
     console.log(endDate);
 
     db.selectData(req.params.username, startDate, endDate).then(function(result){
-        console.log(result);
         res.send(result);
     }, function(err){
         console.log(err);
@@ -123,7 +133,6 @@ app.get('/api/v1/user/:username/usage/:startDate/:endDate', function(req, res){
 app.get('/api/v1/user/:username/devices', function(req, res){
     console.log('got a get devices request for user ' + req.params.username);
     db.selectDevices(req.params.username).then(function(result){
-        console.log(result);
         res.send(result);
     }, function(err){
         console.log(err);
@@ -135,7 +144,6 @@ app.get('/api/v1/user/:username/devices', function(req, res){
 app.get('/api/v1/user/:username/creation', function(req, res){
     console.log('got a get creation data request for user ' + req.params.username);
     db.selectCreationDate(req.params.username).then(function(result){
-        console.log(result);
         res.send(result);
     }, function(err){
         console.log(err);

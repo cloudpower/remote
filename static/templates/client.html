@@ -24,7 +24,7 @@
 		<div id="statusDiv">
 			<table id="devicesTable">
 			</table>
-			<button id="on">on</button> <button id="off">off</button><br/>
+			<!-- <button id="on">on</button> <button id="off">off</button><br/> -->
 		</div>
 	
  
@@ -108,6 +108,19 @@
 		});
 		return d.promise();
 	}
+
+	function getDeviceStatus(device){
+		var d = new $.Deferred;
+		$.get('/api/v1/device/' + device, function(data){
+				if (data.hasOwnProperty('error')){
+					$("#status").text(data.error);
+				}
+				else {
+					d.resolve(data.status);
+				}
+		});
+		return d.promise();
+	}
 	
 	function findCreation(username){
 		var d = new $.Deferred;
@@ -126,65 +139,66 @@
 	function setupStatus(){
 		$.when(findDevices(MASTER_USERNAME)).then(function(devices){
 			$('#devicesTable').append('<tr class="child"><td><b>DEVICE</b></td><td><b>SOCKET 1</b></td><td><b>SOCKET 2</b></td></tr>');
+			console.log(devices);
 			for( var i = 0; i < devices.length; i ++){
+				var device = devices[i];
+				$.when(getDeviceStatus(devices[i])).then(function(status){
+					$('#devicesTable').append('<tr class="child"><td>'+device+' ('+status+')</td><td> <button id="on'+device+'Socket1">on</button> <button id="off'+device+'Socket1">off</button> </td><td><button id="on'+device+'Socket2">on</button> <button id="off'+device+'Socket2">off</button></td></tr>');
 
-				$('#devicesTable').append('<tr class="child"><td>'+devices[i]+'</td><td> <button id="on'+devices[i]+'Socket1">on</button> <button id="off'+devices[i]+'Socket1">off</button> </td><td><button id="on'+devices[i]+'Socket2">on</button> <button id="off'+devices[i]+'Socket2">off</button></td></tr>');
-
-				$('#on'+devices[i]+'Socket1').click(function(){
-					$("#status").text('pending...');
-					$.post('/api/v1/device/'+devices[i]+'/0', {
-					'state': 1
-					}, function(data){
-						if (data.hasOwnProperty('error')){
-							console.log('Socket 1: ' + data.error);
-						}
-						else {
-							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
-						}
+					$('#on'+device+'Socket1').click(function(){
+						$("#status").text('pending...');
+						$.post('/api/v1/device/'+device+'/0', {
+						'state': 1
+						}, function(data){
+							if (data.hasOwnProperty('error')){
+								console.log('Socket 1: ' + data.error);
+							}
+							else {
+								console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+							}
+						});
 					});
-				});
-				$('#off'+devices[i]+'Socket1').click(function(){
-					$("#status").text('pending...');
-					$.post('/api/v1/device/'+devices[i]+'/0', {
-						'state': 0
-					}, function(data){
-						if (data.hasOwnProperty('error')){
-						$("#status").text('Socket 1: ' + data.error);
-						}
-						else {
-							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
-						}
+					$('#off'+device+'Socket1').click(function(){
+						$("#status").text('pending...');
+						$.post('/api/v1/device/'+device+'/0', {
+							'state': 0
+						}, function(data){
+							if (data.hasOwnProperty('error')){
+							$("#status").text('Socket 1: ' + data.error);
+							}
+							else {
+								console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+							}
+						});
 					});
-				});
 
-				$('#on'+devices[i]+'Socket2').click(function(){
-					$("#status").text('pending...');
-					$.post('/api/v1/device/'+devices[i]+'/1', {
-					'state': 1
-					}, function(data){
-						if (data.hasOwnProperty('error')){
+					$('#on'+device+'Socket2').click(function(){
+						$("#status").text('pending...');
+						$.post('/api/v1/device/'+device+'/1', {
+						'state': 1
+						}, function(data){
+							if (data.hasOwnProperty('error')){
+								console.log('Socket 2: ' + data.error);
+							}
+							else {
+								console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+							}
+						});
+					});
+					$('#off'+device+'Socket2').click(function(){
+						$("#status").text('pending...');
+						$.post('/api/v1/device/'+device+'/1', {
+							'state': 0
+						}, function(data){
+							if (data.hasOwnProperty('error')){
 							console.log('Socket 2: ' + data.error);
-						}
-						else {
-							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
-						}
+							}
+							else {
+								console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
+							}
+						});
 					});
 				});
-				$('#off'+devices[i]+'Socket2').click(function(){
-					$("#status").text('pending...');
-					$.post('/api/v1/device/'+devices[i]+'/1', {
-						'state': 0
-					}, function(data){
-						if (data.hasOwnProperty('error')){
-						console.log('Socket 2: ' + data.error);
-						}
-						else {
-							console.log('the state of outlet ' + data.outlet + ' is ' + data.state);
-						}
-					});
-				});
-
-
 			}
 		},function(){
 			console.log('Fail');
