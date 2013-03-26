@@ -49,7 +49,7 @@ app.get('/', function(req, res){
     }
 });
 
-app.get('/qr', function(req, res){
+app.get('/new', function(req, res){
     fs.readFile(__dirname + '/static/templates/qrmaker.html', 'UTF-8', function(err, data){
         res.send(data);
     });
