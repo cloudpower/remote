@@ -199,7 +199,14 @@ io.sockets.on('connection', function (socket) {
             delete connectedDevices[deviceId];
         });
         socket.on('usage-data', function(data){
-            db.logUsage(deviceId, new Date(), data['0'].power, 0);
+            console.log('got new usage data:');
+            console.log(data);
+            if (data['0'] !== undefined){
+                console.log(parseInt(data['0'].power, 10));
+                if (parseInt(data['0'].power, 10) < 200){
+                    db.logUsage(deviceId, new Date(), data['0'].power, 0);
+                }
+            }
         });
     });
 });

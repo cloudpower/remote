@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(/static/css/roboto-condensed.woff) format('woff');
+}
+
 body{
 	font-family: 'Roboto Condensed', sans-serif;
 	font-weight: lighter;
